@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+import PaginaKop from '../components/PaginaKop.astro';
+import Afsluiter from '../components/Afsluiter.astro';
+import { site } from '../config';
+---
+<Base titel="Over" beschrijving={`${site.name} is van ${site.owner}: interactieve workshops over de digitale samenleving.`}>
+  <PaginaKop titel={`Over ${site.name}`} />
+
+  <div class="container over">
+    <div class="leesmaat tekst">
+      <p class="lead">
+        {site.name} is van {site.owner}. Ik ontwerp workshops over hoe technologie de samenleving verandert, en
+        bouw zelf de apps waarmee de zaal meedoet.
+      </p>
+      <p>
+        Het idee is eenvoudig: uitleg landt pas als je iets zelf hebt meegemaakt. Wie vijf rondes in een feed heeft
+        geklikt en daarna de koppen van de buurman hoort, hoeft niet meer overtuigd te worden dat feeds verschillen.
+        Die wil weten hoe dat kan.
+      </p>
+      <p>
+        De workshops zijn gemaakt voor de openbare bibliotheek: een plek waar iedereen welkom is, met en zonder
+        voorkennis. Ze werken net zo goed bij een gemeente, een opleiding of een organisatie die haar mensen wil
+        laten nadenken over de digitale wereld.
+      </p>
+      <p>
+        Na elke workshop schrijf ik op wat werkte en wat niet, en pas ik de workshop daarop aan. Zo wordt elke
+        avond een beetje beter dan de vorige.
+      </p>
+    </div>
+
+    <aside class="kort" aria-labelledby="kort-titel">
+      <h2 id="kort-titel">In het kort</h2>
+      <dl class="feiten">
+        <div><dt>Workshops</dt><dd>Drie, van 90 minuten</dd></div>
+        <div><dt>Gemaakt voor</dt><dd>De openbare bibliotheek</dd></div>
+        <div><dt>Apps</dt><dd>Zelf gebouwd, per workshop</dd></div>
+        <div><dt>Taal</dt><dd>Nederlands</dd></div>
+      </dl>
+    </aside>
+  </div>
+
+  <Afsluiter titel="Kennismaken?" />
+</Base>
+
+<style>
+  .over {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 3rem 5rem;
+    align-items: start;
+    padding-bottom: var(--sectie);
+  }
+  .tekst p + p {
+    margin-top: 1.1em;
+  }
+  .kort {
+    background: var(--roze);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  }
+  .kort h2 {
+    font-size: var(--t-h3);
+    margin-bottom: 1.25rem;
+  }
+  .kort .feiten {
+    grid-template-columns: 1fr;
+  }
+  @media (max-width: 54rem) {
+    .over {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

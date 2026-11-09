@@ -1,0 +1,70 @@
+---
+import { faq } from '../data/faq';
+---
+<section class="sectie vragen" id="vragen" aria-labelledby="vragen-titel">
+  <div class="container vragen-binnen">
+    <div class="sectie-kop">
+      <h2 id="vragen-titel">Veelgestelde vragen</h2>
+      <p>Staat je vraag er niet bij? Stel hem in de <a href="/contact/">kennismaking</a>.</p>
+    </div>
+    <div class="lijst">
+      {faq.map((item) => (
+        <details>
+          <summary>{item.vraag}</summary>
+          <p>{item.antwoord}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .vragen-binnen {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+    gap: 2rem 4rem;
+  }
+  .lijst {
+    border-top: 2px solid var(--inkt);
+  }
+  details {
+    border-bottom: 1px solid var(--lijn);
+  }
+  summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding-block: 1.15rem;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-display);
+    font-stretch: 108%;
+    font-weight: 700;
+    font-size: 1.1875rem;
+    line-height: 1.3;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary::after {
+    content: '+';
+    flex: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+  }
+  details[open] summary::after {
+    transform: rotate(45deg);
+  }
+  details p {
+    padding-bottom: 1.4rem;
+    max-width: var(--maat);
+    color: var(--inkt-zacht);
+  }
+  @media (max-width: 54rem) {
+    .vragen-binnen {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

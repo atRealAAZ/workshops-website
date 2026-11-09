@@ -1,0 +1,376 @@
+---
+import Base from '../layouts/Base.astro';
+import PaginaKop from '../components/PaginaKop.astro';
+import { site } from '../config';
+import { workshops } from '../data/workshops';
+
+const daarna = [
+  'Je krijgt antwoord per mail, met een voorstel voor een kort gesprek.',
+  'In dat gesprek kiezen we de workshop, de datum en wat de zaal nodig heeft.',
+  'Je krijgt een voorstel met prijs, en een aankondigingstekst voor je programma.',
+];
+---
+<Base titel="Plan een kennismaking" beschrijving="Vertel wie je publiek is, dan kijken we samen welke workshop past.">
+  <PaginaKop
+    titel="Plan een kennismaking"
+    lead="Vertel wie je publiek is en wat je zoekt. Daarna plannen we een kort gesprek om te kijken welke workshop past."
+  />
+
+  <div class="container contact">
+    <form
+      id="aanvraag"
+      class="formulier"
+      novalidate
+      data-endpoint={site.formEndpoint}
+      data-email={site.contactEmail}
+    >
+      <div class="veld">
+        <label for="naam">Naam</label>
+        <input id="naam" name="naam" type="text" autocomplete="name" required aria-describedby="naam-fout" />
+        <p class="fout" id="naam-fout" data-melding="Vul je naam in."></p>
+      </div>
+
+      <div class="veld">
+        <label for="email">E-mailadres</label>
+        <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-fout" />
+        <p class="fout" id="email-fout" data-melding="Vul een e-mailadres in, zoals naam@organisatie.nl."></p>
+      </div>
+
+      <div class="veld">
+        <label for="organisatie">Organisatie</label>
+        <input id="organisatie" name="organisatie" type="text" autocomplete="organization" required aria-describedby="organisatie-fout" />
+        <p class="fout" id="organisatie-fout" data-melding="Vul de naam van je organisatie in."></p>
+      </div>
+
+      <div class="veld">
+        <label for="telefoon">Telefoon <span class="optioneel">(niet verplicht)</span></label>
+        <input id="telefoon" name="telefoon" type="tel" autocomplete="tel" />
+      </div>
+
+      <div class="veld">
+        <label for="workshop">Welke workshop?</label>
+        <select id="workshop" name="workshop">
+          <option value="">Nog geen voorkeur, help me kiezen</option>
+          {workshops.map((w) => <option value={w.slug}>{w.titel}</option>)}
+          <option value="reeks">Alle drie, als reeks</option>
+        </select>
+      </div>
+
+      <div class="veld">
+        <label for="soort">Soort organisatie</label>
+        <select id="soort" name="soort">
+          <option value="">Kies wat het best past</option>
+          <option>Bibliotheek</option>
+          <option>Gemeente of overheid</option>
+          <option>Maatschappelijke organisatie of buurthuis</option>
+          <option>School of opleiding</option>
+          <option>Bedrijf</option>
+          <option>Iets anders</option>
+        </select>
+      </div>
+
+      <div class="veld">
+        <label for="aantal">Aantal deelnemers, ongeveer</label>
+        <input id="aantal" name="aantal" type="text" inputmode="numeric" />
+      </div>
+
+      <div class="veld">
+        <label for="plaats">Plaats</label>
+        <input id="plaats" name="plaats" type="text" autocomplete="address-level2" />
+      </div>
+
+      <div class="veld breed">
+        <label for="periode">Wanneer zou je het willen doen?</label>
+        <input id="periode" name="periode" type="text" placeholder="Bijvoorbeeld: in maart, op een doordeweekse avond" />
+      </div>
+
+      <div class="veld breed">
+        <label for="bericht">Vertel iets over je publiek en wat je zoekt</label>
+        <textarea id="bericht" name="bericht" rows="6" required aria-describedby="bericht-fout"></textarea>
+        <p class="fout" id="bericht-fout" data-melding="Schrijf een paar zinnen over je publiek of je vraag."></p>
+      </div>
+
+      <div class="veld breed vinkje">
+        <input id="akkoord" name="akkoord" type="checkbox" required aria-describedby="akkoord-fout" />
+        <label for="akkoord">Ik ga akkoord met de <a href="/privacy/">privacyverklaring</a></label>
+        <p class="fout" id="akkoord-fout" data-melding="Vink aan dat je akkoord gaat met de privacyverklaring."></p>
+      </div>
+
+      <div class="breed verstuur">
+        <button class="knop" type="submit">Verstuur aanvraag</button>
+        <p class="klein">Geen nieuwsbrief. Je gegevens gebruik ik alleen om je aanvraag te beantwoorden.</p>
+      </div>
+
+      <div class="breed status" role="status" aria-live="polite" tabindex="-1"></div>
+    </form>
+
+    <aside class="naast">
+      <div class="paneel">
+        <h2>Wat gebeurt er daarna?</h2>
+        <ol>
+          {daarna.map((d) => <li>{d}</li>)}
+        </ol>
+      </div>
+      <div class="direct">
+        <h2>Liever direct mailen?</h2>
+        <p><a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a></p>
+      </div>
+    </aside>
+  </div>
+</Base>
+
+<script>
+  const form = document.getElementById('aanvraag') as HTMLFormElement | null;
+
+  if (form) {
+    const status = form.querySelector<HTMLElement>('.status')!;
+    const endpoint = form.dataset.endpoint ?? '';
+    const email = form.dataset.email ?? '';
+    const workshopSelect = form.querySelector<HTMLSelectElement>('#workshop')!;
+
+    // Kom je via "Plan <workshop>", dan staat die workshop al gekozen.
+    const gekozen = new URLSearchParams(location.search).get('workshop');
+    if (gekozen && [...workshopSelect.options].some((o) => o.value === gekozen)) {
+      workshopSelect.value = gekozen;
+    }
+
+    const velden = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]')];
+
+    const controleer = (veld: HTMLInputElement | HTMLTextAreaElement) => {
+      const fout = document.getElementById(`${veld.id}-fout`);
+      const geldig = veld.checkValidity();
+      veld.toggleAttribute('aria-invalid', !geldig);
+      if (fout) fout.textContent = geldig ? '' : (fout.dataset.melding ?? '');
+      return geldig;
+    };
+
+    velden.forEach((veld) => {
+      veld.addEventListener('blur', () => {
+        if (veld.hasAttribute('aria-invalid')) controleer(veld);
+      });
+      veld.addEventListener('input', () => {
+        if (veld.hasAttribute('aria-invalid')) controleer(veld);
+      });
+    });
+
+    const meldStatus = (html: string, soort: 'goed' | 'mislukt') => {
+      status.className = `breed status status-${soort}`;
+      status.innerHTML = html;
+      status.focus();
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const ongeldig = velden.filter((v) => !controleer(v));
+      if (ongeldig.length) {
+        ongeldig[0].focus();
+        return;
+      }
+
+      const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+      const workshopNaam = workshopSelect.selectedOptions[0]?.text ?? '';
+
+      if (!endpoint) {
+        const regels = [
+          ['Naam', data.naam],
+          ['E-mail', data.email],
+          ['Organisatie', data.organisatie],
+          ['Telefoon', data.telefoon],
+          ['Workshop', workshopNaam],
+          ['Soort organisatie', data.soort],
+          ['Aantal deelnemers', data.aantal],
+          ['Plaats', data.plaats],
+          ['Wanneer', data.periode],
+        ]
+          .filter(([, waarde]) => waarde)
+          .map(([label, waarde]) => `${label}: ${waarde}`);
+        regels.push('', data.bericht);
+        const onderwerp = `Aanvraag workshop: ${workshopNaam} (${data.organisatie})`;
+        window.location.href = `mailto:${email}?subject=${encodeURIComponent(onderwerp)}&body=${encodeURIComponent(regels.join('\n'))}`;
+        meldStatus(
+          `Je mailprogramma opent met je aanvraag erin. Verstuur die mail om de aanvraag af te ronden. Opent er niets? Mail dan naar <a href="mailto:${email}">${email}</a>.`,
+          'goed',
+        );
+        return;
+      }
+
+      const knop = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+      knop.disabled = true;
+      knop.textContent = 'Bezig met versturen';
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ ...data, workshop: workshopNaam }),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        meldStatus(`Aanvraag verstuurd. Je krijgt antwoord op ${data.email.replace(/[<>&"]/g, '')}.`, 'goed');
+      } catch {
+        meldStatus(
+          `Versturen lukte niet. Probeer het opnieuw, of mail je aanvraag naar <a href="mailto:${email}">${email}</a>.`,
+          'mislukt',
+        );
+      } finally {
+        knop.disabled = false;
+        knop.textContent = 'Verstuur aanvraag';
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(16rem, 1fr);
+    gap: 3rem clamp(2rem, 1rem + 4vw, 5rem);
+    align-items: start;
+    padding-bottom: var(--sectie);
+  }
+  .formulier {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 1.5rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--inkt);
+  }
+  .breed {
+    grid-column: 1 / -1;
+  }
+  .veld label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+  }
+  .optioneel {
+    font-weight: 400;
+    color: var(--inkt-zacht);
+  }
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'],
+  select,
+  textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 1.0625rem;
+    color: var(--inkt);
+    background: var(--papier);
+    border: 2px solid #b9b4cc;
+    border-radius: 3px;
+    padding: 0.7rem 0.8rem;
+  }
+  select {
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--inkt) 50%),
+      linear-gradient(135deg, var(--inkt) 50%, transparent 50%);
+    background-position: calc(100% - 1.2rem) 55%, calc(100% - 0.85rem) 55%;
+    background-size: 0.35rem 0.35rem;
+    background-repeat: no-repeat;
+    padding-right: 2.5rem;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 9rem;
+  }
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid var(--detective);
+    outline-offset: 1px;
+    border-color: var(--inkt);
+  }
+  input::placeholder {
+    color: #807b98;
+  }
+  [aria-invalid] {
+    border-color: var(--bubbel) !important;
+  }
+  .fout {
+    color: #b42a14;
+    font-size: var(--t-klein);
+    margin-top: 0.35rem;
+  }
+  .fout:empty {
+    display: none;
+  }
+  .vinkje {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 0.75rem;
+    align-items: start;
+  }
+  .vinkje input {
+    width: 1.35rem;
+    height: 1.35rem;
+    margin: 0.15rem 0 0;
+    accent-color: var(--inkt);
+  }
+  .vinkje label {
+    font-weight: 400;
+    margin: 0;
+  }
+  .vinkje .fout {
+    grid-column: 2;
+  }
+  .verstuur {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+  }
+  .knop:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+  .klein {
+    font-size: var(--t-klein);
+    color: var(--inkt-zacht);
+  }
+  .status:empty {
+    display: none;
+  }
+  .status {
+    padding: 1.25rem 1.5rem;
+    border-left: 6px solid var(--land);
+    background: #eaf6f2;
+  }
+  .status-mislukt {
+    border-left-color: var(--bubbel);
+    background: #fdeeea;
+  }
+
+  .naast {
+    display: grid;
+    gap: 2rem;
+  }
+  .paneel {
+    background: var(--roze);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  }
+  .naast h2 {
+    font-size: var(--t-h3);
+    margin-bottom: 1rem;
+  }
+  .paneel ol {
+    margin: 0;
+    padding-left: 1.25rem;
+  }
+  .paneel li + li {
+    margin-top: 0.75rem;
+  }
+  .paneel li::marker {
+    font-family: var(--font-display);
+    font-weight: 800;
+  }
+  .direct p {
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 54rem) {
+    .contact,
+    .formulier {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

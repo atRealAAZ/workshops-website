@@ -1,0 +1,194 @@
+---
+import Base from '../../layouts/Base.astro';
+import WorkshopCover from '../../components/WorkshopCover.astro';
+import Afsluiter from '../../components/Afsluiter.astro';
+import { workshops } from '../../data/workshops';
+
+const reeks = [
+  { vraag: 'Wat zie je online?', slug: 'de-informatiebubbel' },
+  { vraag: 'Kun je het geloven?', slug: 'nepnieuws-detective' },
+  { vraag: 'Hoe beslissen we samen?', slug: 'samen-een-land-besturen' },
+];
+---
+<Base
+  titel="Workshops"
+  beschrijving="De informatiebubbel, Nepnieuws-detective en Samen een land besturen: drie interactieve workshops van 90 minuten."
+>
+  <section class="container pagina-kop">
+    <h1>Workshops</h1>
+    <p class="lead">
+      Drie workshops van 90 minuten, elk rond één vraag. De zaal doet mee op de telefoon, aan tafels en met de
+      beamer, en de uitleg komt pas als iedereen het heeft meegemaakt.
+    </p>
+  </section>
+
+  <ul class="lijst">
+    {workshops.map((w) => (
+      <li class={`toon-${w.tone}`}>
+        <div class="container rij">
+          <a href={`/workshops/${w.slug}/`} class="beeld" tabindex="-1" aria-hidden="true">
+            <WorkshopCover tone={w.tone} />
+          </a>
+          <div class="tekst">
+            <p class="vraag">{w.vraag}</p>
+            <h2><a href={`/workshops/${w.slug}/`}>{w.titel}</a></h2>
+            <p class="kort">{w.kort}</p>
+            <dl class="feiten">
+              {w.feiten.slice(0, 3).map((f) => (
+                <div><dt>{f.label}</dt><dd>{f.waarde}</dd></div>
+              ))}
+            </dl>
+            <div class="knoppen">
+              <a class="knop" href={`/workshops/${w.slug}/`}>Over {w.titel}</a>
+              <a class="knop knop-tweede" href={`/contact/?workshop=${w.slug}`}>Plan deze workshop</a>
+            </div>
+          </div>
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  <section class="sectie reeks" aria-labelledby="reeks-titel">
+    <div class="container reeks-grid">
+      <div>
+        <h2 id="reeks-titel">Als reeks van drie avonden</h2>
+        <p>
+          De workshops staan los van elkaar, maar gaan over drie kanten van dezelfde vraag: hoe leven we samen in
+          een digitale wereld? Geboekt als reeks bouwen de avonden op elkaar voort.
+        </p>
+      </div>
+      <ol class="reeks-lijst">
+        {reeks.map((r) => {
+          const w = workshops.find((x) => x.slug === r.slug)!;
+          return (
+            <li class={`toon-${w.tone}`}>
+              <span class="reeks-vraag">{r.vraag}</span>
+              <a href={`/workshops/${w.slug}/`}>{w.titel}</a>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  </section>
+
+  <Afsluiter />
+</Base>
+
+<style>
+  .pagina-kop {
+    padding-block: clamp(3rem, 2rem + 4vw, 5.5rem) clamp(2.5rem, 2rem + 2vw, 4rem);
+  }
+  .pagina-kop h1 {
+    font-size: clamp(2.5rem, 1.3rem + 4.4vw, 4.5rem);
+    margin-bottom: 1.25rem;
+  }
+  .pagina-kop .lead {
+    max-width: var(--maat);
+  }
+
+  .lijst {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .lijst > li {
+    border-top: 6px solid var(--toon);
+  }
+  .rij {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 2rem clamp(2rem, 1rem + 3vw, 4.5rem);
+    align-items: center;
+    padding-block: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+  }
+  .lijst > li:nth-child(even) .beeld {
+    order: 2;
+  }
+  .beeld svg {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+  .vraag {
+    font-family: var(--font-display);
+    font-stretch: 108%;
+    font-weight: 700;
+    font-size: var(--t-h3);
+    color: var(--toon);
+    margin-bottom: 0.5rem;
+  }
+  .tekst h2 {
+    font-size: clamp(2rem, 1.3rem + 2.4vw, 3rem);
+    margin-bottom: 1.1rem;
+  }
+  .tekst h2 a {
+    text-decoration: none;
+  }
+  .tekst h2 a:hover {
+    text-decoration: underline;
+  }
+  .kort {
+    max-width: var(--maat);
+  }
+  .tekst .feiten {
+    margin-block: 1.75rem 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--lijn);
+  }
+  .tekst .feiten dd {
+    font-size: var(--t-basis);
+  }
+
+  .reeks {
+    background: #f4f3f8;
+  }
+  .reeks-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 2.5rem 4rem;
+    align-items: start;
+  }
+  .reeks-grid p {
+    margin-top: 1rem;
+    max-width: 30rem;
+  }
+  .reeks-lijst {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: avond;
+  }
+  .reeks-lijst li {
+    counter-increment: avond;
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 0.25rem 1rem;
+    padding-block: 1rem;
+    border-top: 2px solid var(--inkt);
+  }
+  .reeks-lijst li::before {
+    content: 'Avond ' counter(avond);
+    grid-row: span 2;
+    font-weight: 700;
+  }
+  .reeks-vraag {
+    font-family: var(--font-display);
+    font-stretch: var(--breed);
+    font-weight: 800;
+    font-size: var(--t-h3);
+  }
+  .reeks-lijst a {
+    text-decoration-color: var(--toon);
+    text-decoration-thickness: 3px;
+  }
+
+  @media (max-width: 54rem) {
+    .rij,
+    .reeks-grid {
+      grid-template-columns: 1fr;
+    }
+    .lijst > li:nth-child(even) .beeld {
+      order: 0;
+    }
+  }
+</style>

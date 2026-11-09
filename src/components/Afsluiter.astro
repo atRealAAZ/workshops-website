@@ -1,0 +1,54 @@
+---
+interface Props {
+  titel?: string;
+  tekst?: string;
+  knop?: string;
+  href?: string;
+}
+const {
+  titel = 'Zullen we een workshop plannen?',
+  tekst = 'Vertel wie je publiek is en wat je zoekt. In een kort gesprek kijken we welke workshop past, en wat jullie zaal nodig heeft.',
+  knop = 'Plan een kennismaking',
+  href = '/contact/',
+} = Astro.props;
+---
+<section class="afsluiter" aria-labelledby="afsluiter-titel">
+  <div class="container afsluiter-binnen">
+    <div>
+      <h2 id="afsluiter-titel">{titel}</h2>
+      <p>{tekst}</p>
+    </div>
+    <div class="knoppen">
+      <a class="knop" href={href}>{knop}</a>
+      <a class="knop knop-tweede" href="/workshops/">Bekijk de workshops</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .afsluiter {
+    background: var(--roze);
+    padding-block: clamp(3.5rem, 2.5rem + 4vw, 6rem);
+  }
+  .afsluiter-binnen {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 2rem 4rem;
+    align-items: end;
+  }
+  .afsluiter p {
+    margin-top: 1rem;
+    max-width: 34rem;
+  }
+  .knoppen {
+    justify-content: flex-end;
+  }
+  @media (max-width: 54rem) {
+    .afsluiter-binnen {
+      grid-template-columns: 1fr;
+    }
+    .knoppen {
+      justify-content: flex-start;
+    }
+  }
+</style>

@@ -1,0 +1,163 @@
+---
+/**
+ * Het beeld van elke workshop, bij het bouwen gegenereerd (vaste seed, dus
+ * elke build hetzelfde).
+ *  - bubbel:    twee netwerken die uit elkaar drijven, naar het geelgroene
+ *               netwerk uit de aankondiging
+ *  - detective: rasterpunten met een vergrootglas dat scherp stelt
+ *  - land:      een halfrond met zetels: de zaal die samen beslist
+ */
+import type { Tone } from '../data/workshops';
+
+interface Props {
+  tone: Tone;
+  achtergrond?: boolean;
+  class?: string;
+}
+const { tone, achtergrond = true, class: klasse } = Astro.props;
+
+const W = 400;
+const H = 300;
+
+function seeded(seed: number) {
+  return () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const kleur = {
+  bubbel: { bg: '#d9381e', a: '#ecee73' },
+  detective: { bg: '#3a3f9e', a: '#7c82e0', b: '#fdd0c7' },
+  land: { bg: '#0e7c66', a: '#8fdcc1', b: '#ffffff', c: '#0a5747' },
+};
+
+// --- bubbel ---------------------------------------------------------
+type P = { x: number; y: number };
+const r = seeded(7);
+function cluster(cx: number, cy: number, rx: number, ry: number, n: number): P[] {
+  return Array.from({ length: n }, () => {
+    const a = r() * Math.PI * 2;
+    const d = Math.sqrt(r());
+    return { x: cx + Math.cos(a) * rx * d, y: cy + Math.sin(a) * ry * d };
+  });
+}
+function verbind(ps: P[], k: number) {
+  const lijnen: [P, P][] = [];
+  const gezien = new Set<string>();
+  ps.forEach((p, i) => {
+    ps.map((q, j) => ({ j, d: (p.x - q.x) ** 2 + (p.y - q.y) ** 2 }))
+      .filter((o) => o.j !== i)
+      .sort((a, b) => a.d - b.d)
+      .slice(0, k)
+      .forEach(({ j }) => {
+        const key = [Math.min(i, j), Math.max(i, j)].join('-');
+        if (!gezien.has(key)) {
+          gezien.add(key);
+          lijnen.push([p, ps[j]]);
+        }
+      });
+  });
+  return lijnen;
+}
+const links = cluster(120, 160, 88, 95, 13);
+const rechts = cluster(300, 135, 72, 80, 11);
+const bubbelLijnen = [...verbind(links, 3), ...verbind(rechts, 3)];
+// de laatste draden tussen de twee bubbels
+const brug = [
+  [links.reduce((a, b) => (b.x > a.x ? b : a)), rechts.reduce((a, b) => (b.x < a.x ? b : a))],
+] as [P, P][];
+
+// --- detective ------------------------------------------------------
+const lens = { x: 238, y: 132, r: 78 };
+const lensId = `lens-${Math.random().toString(36).slice(2, 8)}`;
+const stap = 15;
+const punten: { x: number; y: number; r: number }[] = [];
+for (let y = stap / 2; y < H; y += stap) {
+  for (let x = stap / 2; x < W; x += stap) {
+    const t = (x / W) * 0.6 + (1 - y / H) * 0.4;
+    punten.push({ x, y, r: 1 + 3.2 * t * t });
+  }
+}
+
+// --- land -----------------------------------------------------------
+// Halfrond: per rij evenveel zetels als past bij de straal, zodat de
+// tussenruimte overal gelijk is.
+const zetels: { x: number; y: number; k: string; a: number }[] = [];
+const centrum = { x: 200, y: 238 };
+const stralen = [62, 89, 116, 143, 170];
+const perRij = [8, 11, 15, 19, 22];
+stralen.forEach((straal, ri) => {
+  const n = perRij[ri];
+  for (let i = 0; i < n; i++) {
+    const a = Math.PI - (Math.PI * i) / (n - 1);
+    zetels.push({ x: centrum.x + Math.cos(a) * straal, y: centrum.y - Math.sin(a) * straal, k: '', a });
+  }
+});
+zetels.sort((p, q) => q.a - p.a);
+zetels.forEach((z, i) => {
+  const t = i / zetels.length;
+  z.k = t < 0.42 ? kleur.land.a : t < 0.64 ? kleur.land.b : kleur.land.c;
+});
+
+const f = (n: number) => n.toFixed(1);
+---
+<svg
+  class={klasse}
+  viewBox={`0 0 ${W} ${H}`}
+  preserveAspectRatio="xMidYMid slice"
+  aria-hidden="true"
+  focusable="false"
+>
+  {achtergrond && <rect width={W} height={H} fill={kleur[tone].bg} />}
+
+  {tone === 'bubbel' && (
+    <g stroke={kleur.bubbel.a} fill={kleur.bubbel.a} stroke-linecap="round">
+      {bubbelLijnen.map(([a, b]) => (
+        <line x1={f(a.x)} y1={f(a.y)} x2={f(b.x)} y2={f(b.y)} stroke-width="1.6" />
+      ))}
+      {brug.map(([a, b]) => (
+        <line x1={f(a.x)} y1={f(a.y)} x2={f(b.x)} y2={f(b.y)} stroke-width="1.2" stroke-dasharray="2 7" />
+      ))}
+      {[...links, ...rechts].map((p) => <circle cx={f(p.x)} cy={f(p.y)} r="3.4" stroke="none" />)}
+    </g>
+  )}
+
+  {tone === 'detective' && (
+    <g>
+      <defs>
+        <clipPath id={lensId}>
+          <circle cx={lens.x} cy={lens.y} r={lens.r - 5} />
+        </clipPath>
+      </defs>
+      <g fill={kleur.detective.a}>
+        {punten.map((p) => <circle cx={f(p.x)} cy={f(p.y)} r={f(p.r)} />)}
+      </g>
+      <g clip-path={`url(#${lensId})`}>
+        <rect x={lens.x - lens.r} y={lens.y - lens.r} width={lens.r * 2} height={lens.r * 2} fill={kleur.detective.bg} />
+        <g fill={kleur.detective.b}>
+          {punten.map((p) => <circle cx={f(p.x)} cy={f(p.y)} r="2.4" />)}
+        </g>
+      </g>
+      <circle cx={lens.x} cy={lens.y} r={lens.r} fill="none" stroke="#ffffff" stroke-width="9" />
+      <line
+        x1={f(lens.x + Math.cos(Math.PI / 4) * (lens.r + 4))}
+        y1={f(lens.y + Math.sin(Math.PI / 4) * (lens.r + 4))}
+        x2={f(lens.x + Math.cos(Math.PI / 4) * (lens.r + 70))}
+        y2={f(lens.y + Math.sin(Math.PI / 4) * (lens.r + 70))}
+        stroke="#ffffff"
+        stroke-width="18"
+        stroke-linecap="round"
+      />
+    </g>
+  )}
+
+  {tone === 'land' && (
+    <g>
+      {zetels.map((z) => <circle cx={f(z.x)} cy={f(z.y)} r="7.5" fill={z.k} />)}
+    </g>
+  )}
+</svg>

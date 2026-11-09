@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import PaginaKop from '../components/PaginaKop.astro';
+import { site } from '../config';
+---
+<Base titel="Privacy" beschrijving={`Hoe ${site.name} omgaat met je gegevens.`}>
+  <PaginaKop titel="Privacyverklaring" />
+  <div class="container leesmaat privacy">
+    <h2>Deze website</h2>
+    <p>Deze website gebruikt geen cookies, geen analysesoftware en geen trackers. Lettertypes staan op de site zelf, dus je browser maakt geen verbinding met externe diensten.</p>
+
+    <h2>Het contactformulier</h2>
+    <p>Als je het contactformulier invult, gebruik ik je naam, e-mailadres, organisatie en wat je verder invult alleen om je aanvraag te beantwoorden en een workshop met je te plannen. Je gegevens worden niet gedeeld met anderen en niet gebruikt voor een nieuwsbrief.</p>
+    {site.formEndpoint && (
+      <p>Het formulier wordt verstuurd via een externe formulierdienst, die je bericht doorstuurt per e-mail.</p>
+    )}
+    <p>Na afloop van ons contact bewaar ik je gegevens niet langer dan nodig is voor de afspraak en de administratie.</p>
+
+    <h2>Tijdens een workshop</h2>
+    <p>Deelnemers doen mee via een QR-code en vullen hooguit hun voornaam in. Er is geen account en geen e-mailadres nodig, en de app leest niets uit hun eigen telefoon of sociale media.</p>
+
+    <h2>Inzien of verwijderen</h2>
+    <p>Wil je weten welke gegevens ik van je heb, of wil je dat ik ze verwijder? Mail naar <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>.</p>
+  </div>
+</Base>
+
+<style>
+  .privacy {
+    padding-bottom: var(--sectie);
+  }
+  .privacy h2 {
+    font-size: var(--t-h3);
+    margin: 2.5rem 0 0.75rem;
+  }
+  .privacy h2:first-child {
+    margin-top: 0;
+  }
+</style>

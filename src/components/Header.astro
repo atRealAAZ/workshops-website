@@ -1,0 +1,134 @@
+---
+import { site } from '../config';
+import Merkteken from './Merkteken.astro';
+
+const pad = Astro.url.pathname.replace(/\/$/, '') || '/';
+const links = [
+  { href: '/workshops/', label: 'Workshops' },
+  { href: '/aanpak/', label: 'Aanpak' },
+  { href: '/over/', label: 'Over' },
+  { href: '/#vragen', label: 'Vragen' },
+];
+const actief = (href: string) => {
+  const h = href.replace(/\/$/, '');
+  return h !== '/#vragen' && (pad === h || pad.startsWith(h + '/'));
+};
+---
+<header class="kop">
+  <div class="container kop-binnen">
+    <a href="/" class="merk" aria-label={`${site.name}, naar de homepage`}>
+      <Merkteken />
+      <span>{site.name}</span>
+    </a>
+
+    <button class="menu-knop" type="button" aria-expanded="false" aria-controls="hoofdmenu">Menu</button>
+
+    <nav id="hoofdmenu" class="menu" aria-label="Hoofdmenu">
+      <ul>
+        {links.map((l) => (
+          <li>
+            <a href={l.href} aria-current={actief(l.href) ? 'page' : undefined}>{l.label}</a>
+          </li>
+        ))}
+      </ul>
+      <a href="/contact/" class="knop">Plan een kennismaking</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const knop = document.querySelector<HTMLButtonElement>('.menu-knop');
+  const menu = document.getElementById('hoofdmenu');
+  knop?.addEventListener('click', () => {
+    const open = knop.getAttribute('aria-expanded') === 'true';
+    knop.setAttribute('aria-expanded', String(!open));
+    menu?.classList.toggle('open', !open);
+  });
+</script>
+
+<style>
+  .kop {
+    border-bottom: 1px solid var(--lijn);
+    background: var(--papier);
+  }
+  .kop-binnen {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 4.75rem;
+  }
+  .merk {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: 1.3125rem;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+  .menu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .menu ul {
+    display: flex;
+    gap: 1.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .menu ul a {
+    text-decoration: none;
+    padding-block: 0.4rem;
+  }
+  .menu ul a:hover,
+  .menu ul a[aria-current='page'] {
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 0.45em;
+  }
+  .menu-knop {
+    display: none;
+    font: inherit;
+    font-weight: 700;
+    color: var(--inkt);
+    background: none;
+    border: 2px solid var(--inkt);
+    border-radius: 3px;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 54rem) {
+    .kop-binnen {
+      flex-wrap: wrap;
+    }
+    .menu-knop {
+      display: inline-block;
+    }
+    .menu {
+      display: none;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+      padding-bottom: 1.5rem;
+    }
+    .menu.open {
+      display: flex;
+    }
+    .menu ul {
+      flex-direction: column;
+      gap: 0;
+    }
+    .menu ul a {
+      display: block;
+      padding-block: 0.7rem;
+      border-top: 1px solid var(--lijn);
+    }
+  }
+</style>

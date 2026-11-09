@@ -1,0 +1,113 @@
+---
+import Base from '../layouts/Base.astro';
+import PaginaKop from '../components/PaginaKop.astro';
+import Afsluiter from '../components/Afsluiter.astro';
+
+const delen = [
+  {
+    titel: 'Waarom de uitleg achteraf komt',
+    tekst: [
+      'Wie vooraf hoort hoe een feed werkt, klikt bewust anders, en dan ontstaat er niets om te vergelijken. Wie vooraf hoort welke beelden nep zijn, merkt nooit dat je eigen ogen je kunnen bedriegen.',
+      'Daarom hoor je aan het begin alleen wat je nodig hebt om mee te doen. De rest volgt als de zaal het zelf heeft gezien, en dan hangt elk punt aan iets wat net gebeurde.',
+    ],
+  },
+  {
+    titel: 'De zaal is het middelpunt',
+    tekst: [
+      'Het zijn workshops in een echte zaal. De telefoon is een hulpmiddel: rondes zijn kort, en daarna gaan de schermen omlaag. De gesprekken gebeuren met je buurman, aan tafel of met de hele zaal.',
+      'Op de beamer ziet iedereen wat de zaal samen deed: hoe er gestemd is, waar de feeds uit elkaar liepen, welke tafels het oneens waren.',
+    ],
+  },
+  {
+    titel: 'Een eigen app voor elke workshop',
+    tekst: [
+      'Elke workshop heeft een eigen webapp, gemaakt voor die ene avond, met drie schermen: de telefoon van de deelnemer, de beamer en de regie voor de begeleider.',
+      'Deelnemers scannen een QR-code en vullen hooguit hun voornaam in. Geen account, geen e-mailadres, niets te installeren, en niets uit hun eigen telefoon of sociale media.',
+    ],
+  },
+  {
+    titel: 'Verzonnen plekken, echte vragen',
+    tekst: [
+      'De informatiebubbel en Samen een land besturen spelen in Lindenhaven: een verzonnen stad, en een verzonnen land. Zo gaat het gesprek over hoe het werkt, en niet over wie er nu regeert of gelijk heeft.',
+      'De Nepnieuws-detective doet het andersom. Daar werk je met berichten die echt rondgingen, want alleen die kun je echt uitzoeken.',
+    ],
+  },
+  {
+    titel: 'Voor jong en oud',
+    tekst: [
+      'De workshops zijn gemaakt voor de openbare bibliotheek, waar een student naast een gepensioneerde zit. Niemand heeft voorkennis nodig. Elke ronde start voor iedereen tegelijk, en wie minder handig is met een telefoon, zit naast iemand die het wel is.',
+      'Juist die mix maakt het gesprek beter. De een zoekt snel een foto terug, de ander herkent meteen de brug die erop staat.',
+    ],
+  },
+  {
+    titel: 'Uitleggen, niet oordelen',
+    tekst: [
+      'We laten zien hoe het werkt. Of sociale media slecht zijn, wie er gelijk heeft en welk systeem het beste is, bepaalt de deelnemer zelf.',
+      'Kritiek hoort daarbij. In Samen een land besturen mag het alternatief net zo hard worden afgekraakt als het systeem van nu.',
+    ],
+  },
+];
+---
+<Base titel="Aanpak" beschrijving="Eerst meemaken, dan pas uitleg. Zo werken de workshops van Meemaken.">
+  <PaginaKop
+    titel="Eerst meemaken, dan pas uitleg"
+    lead="In een lezing hoor je hoe algoritmes, nepnieuws of democratie werken. In deze workshops merk je het eerst zelf. De uitleg komt daarna."
+  />
+
+  <div class="container delen">
+    {delen.map((d) => (
+      <section class="deel">
+        <h2>{d.titel}</h2>
+        <div class="leesmaat">
+          {d.tekst.map((p) => <p>{p}</p>)}
+        </div>
+      </section>
+    ))}
+
+    <section class="deel" id="praktisch">
+      <h2>Wat de zaal nodig heeft</h2>
+      <div class="leesmaat nodig">
+        <ul class="streeplijst">
+          <li>Een zaal met tafels, voor 12 tot 30 deelnemers.</li>
+          <li>Een beamer met scherm. Voor de Nepnieuws-detective ook geluid.</li>
+          <li>Wifi die het aankan dat iedereen tegelijk online is.</li>
+          <li>Deelnemers met een telefoon, of een buur om bij mee te kijken.</li>
+        </ul>
+        <p>Ik ben ruim voor aanvang aanwezig om wifi, beamer en app te testen.</p>
+      </div>
+    </section>
+  </div>
+
+  <Afsluiter />
+</Base>
+
+<style>
+  .delen {
+    padding-bottom: var(--sectie);
+  }
+  .deel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+    gap: 1rem 4rem;
+    padding-block: clamp(2rem, 1.5rem + 2vw, 3rem);
+    border-top: 1px solid var(--lijn);
+  }
+  .deel:first-child {
+    border-top: 2px solid var(--inkt);
+  }
+  .deel h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  }
+  .nodig {
+    background: var(--roze);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  }
+  .nodig p {
+    margin-top: 1.25rem;
+  }
+  @media (max-width: 54rem) {
+    .deel {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

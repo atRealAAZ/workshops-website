@@ -1,0 +1,313 @@
+@import '@fontsource-variable/archivo/standard.css';
+@import '@fontsource/atkinson-hyperlegible/400.css';
+@import '@fontsource/atkinson-hyperlegible/400-italic.css';
+@import '@fontsource/atkinson-hyperlegible/700.css';
+
+/* ------------------------------------------------------------------
+   Tokens
+   Eén kleur per workshop, overgenomen uit de bestaande aankondigingen
+   (oranjerood, indigo) en een groen voor het derde. Roze is de balk uit
+   de bibliotheekaankondigingen: praktische informatie staat daarop.
+   ------------------------------------------------------------------ */
+:root {
+  --papier: #ffffff;
+  --inkt: #221a4c;
+  --inkt-zacht: #4d4870;
+  --lijn: #dcd8e8;
+  --roze: #fdd0c7;
+  --roze-diep: #f6b4a6;
+
+  --bubbel: #d9381e;
+  --bubbel-net: #ecee73;
+  --detective: #3a3f9e;
+  --detective-licht: #7c82e0;
+  --land: #0e7c66;
+  --land-licht: #8fdcc1;
+
+  --font-display: 'Archivo Variable', 'Arial Black', system-ui, sans-serif;
+  --font-body: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Schaal volgens de klassieke reeks: 16 18 21 24 36 48 60 72 */
+  --t-klein: 1rem;
+  --t-basis: 1.125rem;
+  --t-h3: 1.3125rem;
+  --t-h2: clamp(1.75rem, 1.2rem + 1.8vw, 2.25rem);
+  --t-h1: clamp(2.25rem, 1.4rem + 3.2vw, 3.75rem);
+  --t-vraag: clamp(2rem, 0.9rem + 4.4vw, 4.5rem);
+
+  --breed: 118%;
+  --container: 76rem;
+  --rand: clamp(1.25rem, 4vw, 3rem);
+  --maat: 38rem;
+  --sectie: clamp(4rem, 3rem + 5vw, 7.5rem);
+}
+
+/* ------------------------------------------------------------------
+   Basis
+   ------------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--papier);
+  color: var(--inkt);
+  font-family: var(--font-body);
+  font-size: var(--t-basis);
+  line-height: 1.55;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-stretch: var(--breed);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.012em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--t-h1);
+}
+h2 {
+  font-size: var(--t-h2);
+}
+h3 {
+  font-size: var(--t-h3);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+p + p {
+  margin-top: 1em;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 0.14em;
+}
+
+:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--roze);
+  color: var(--inkt);
+}
+
+.visueel-verborgen {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.overslaan {
+  position: absolute;
+  left: var(--rand);
+  top: -4rem;
+  z-index: 100;
+  background: var(--inkt);
+  color: var(--papier);
+  padding: 0.6rem 1rem;
+}
+.overslaan:focus {
+  top: 1rem;
+}
+
+/* ------------------------------------------------------------------
+   Opmaak-hulpjes
+   ------------------------------------------------------------------ */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--rand);
+}
+
+.sectie {
+  padding-block: var(--sectie);
+}
+
+.sectie-kop {
+  max-width: var(--maat);
+  margin-bottom: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+}
+
+.sectie-kop p {
+  margin-top: 1rem;
+  color: var(--inkt-zacht);
+}
+
+.lead {
+  font-size: 1.3125rem;
+  line-height: 1.5;
+}
+
+.leesmaat {
+  max-width: var(--maat);
+}
+
+/* Knoppen. Primair = inkt, secundair = omlijnd. Op een gekleurde band
+   draaien ze om via .op-kleur. */
+.knoppen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.knop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.7rem 1.35rem;
+  border: 2px solid var(--inkt);
+  border-radius: 3px;
+  background: var(--inkt);
+  color: var(--papier);
+  font-family: var(--font-display);
+  font-stretch: 108%;
+  font-weight: 700;
+  font-size: var(--t-klein);
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.knop:hover {
+  background: transparent;
+  color: var(--inkt);
+}
+
+.knop-tweede {
+  background: transparent;
+  color: var(--inkt);
+}
+
+.knop-tweede:hover {
+  background: var(--inkt);
+  color: var(--papier);
+}
+
+.op-kleur .knop {
+  border-color: var(--papier);
+  background: var(--papier);
+  color: var(--toon, var(--inkt));
+}
+.op-kleur .knop:hover {
+  background: transparent;
+  color: var(--papier);
+}
+.op-kleur .knop-tweede {
+  background: transparent;
+  color: var(--papier);
+}
+.op-kleur .knop-tweede:hover {
+  background: var(--papier);
+  color: var(--toon, var(--inkt));
+}
+
+/* Toon per workshop: zet --toon op een element, dan volgt de rest. */
+.toon-bubbel {
+  --toon: var(--bubbel);
+  --toon-licht: var(--bubbel-net);
+}
+.toon-detective {
+  --toon: var(--detective);
+  --toon-licht: var(--detective-licht);
+}
+.toon-land {
+  --toon: var(--land);
+  --toon-licht: var(--land-licht);
+}
+
+/* Lijst met een korte streep ervoor, voor opsommingen in lopende tekst */
+.streeplijst {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.streeplijst li {
+  position: relative;
+  padding-left: 1.6rem;
+}
+.streeplijst li + li {
+  margin-top: 0.75rem;
+}
+.streeplijst li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.78em;
+  width: 0.9rem;
+  height: 3px;
+  background: var(--toon, var(--inkt));
+}
+
+/* Feiten op de roze balk */
+.feiten {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: 1.25rem 2rem;
+  margin: 0;
+}
+.feiten dt {
+  font-size: var(--t-klein);
+  color: var(--inkt-zacht);
+}
+.feiten dd {
+  margin: 0.15rem 0 0;
+  font-family: var(--font-display);
+  font-stretch: 108%;
+  font-weight: 700;
+  font-size: 1.1875rem;
+  line-height: 1.25;
+}

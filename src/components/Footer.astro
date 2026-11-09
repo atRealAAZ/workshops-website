@@ -1,0 +1,125 @@
+---
+import { site } from '../config';
+import { workshops } from '../data/workshops';
+import Merkteken from './Merkteken.astro';
+const jaar = new Date().getFullYear();
+---
+<footer class="voet">
+  <div class="banden" aria-hidden="true">
+    <span class="toon-land"></span><span class="toon-detective"></span><span class="toon-bubbel"></span>
+  </div>
+  <div class="container voet-binnen">
+    <div class="voet-merk">
+      <a href="/" class="merk">
+        <Merkteken size={28} />
+        <span>{site.name}</span>
+      </a>
+      <p>{site.tagline}. Eerst meemaken, dan pas uitleg.</p>
+    </div>
+
+    <nav aria-label="Workshops">
+      <h2>Workshops</h2>
+      <ul>
+        {workshops.map((w) => <li><a href={`/workshops/${w.slug}/`}>{w.titel}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav aria-label="Meer">
+      <h2>Meer</h2>
+      <ul>
+        <li><a href="/aanpak/">Aanpak</a></li>
+        <li><a href="/over/">Over</a></li>
+        <li><a href="/#vragen">Veelgestelde vragen</a></li>
+        <li><a href="/privacy/">Privacy</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2>Contact</h2>
+      <ul>
+        <li><a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a></li>
+        <li><a href="/contact/">Plan een kennismaking</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container onder">
+    <p>© {jaar} {site.name}. Deze site gebruikt geen cookies en volgt je niet.</p>
+  </div>
+</footer>
+
+<style>
+  .voet {
+    margin-top: 0;
+    font-size: var(--t-klein);
+  }
+  .banden {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 6px;
+  }
+  .banden span {
+    background: var(--toon);
+  }
+  .voet-binnen {
+    display: grid;
+    grid-template-columns: 1.6fr repeat(3, 1fr);
+    gap: 2.5rem;
+    padding-block: 3.5rem 2.5rem;
+  }
+  .merk {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: 1.25rem;
+    text-decoration: none;
+  }
+  .voet-merk p {
+    margin-top: 0.9rem;
+    max-width: 22rem;
+    color: var(--inkt-zacht);
+  }
+  .voet h2 {
+    font-size: var(--t-klein);
+    font-stretch: 108%;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .voet ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .voet li + li {
+    margin-top: 0.4rem;
+  }
+  .voet ul a {
+    text-decoration: none;
+  }
+  .voet ul a:hover {
+    text-decoration: underline;
+  }
+  .onder {
+    padding-bottom: 2rem;
+    color: var(--inkt-zacht);
+  }
+  .onder p {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--lijn);
+  }
+  @media (max-width: 54rem) {
+    .voet-binnen {
+      grid-template-columns: 1fr 1fr;
+    }
+    .voet-merk {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 30rem) {
+    .voet-binnen {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

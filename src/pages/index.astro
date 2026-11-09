@@ -1,0 +1,577 @@
+---
+import Base from '../layouts/Base.astro';
+import WorkshopCover from '../components/WorkshopCover.astro';
+import Vragen from '../components/Vragen.astro';
+import Afsluiter from '../components/Afsluiter.astro';
+import { workshops } from '../data/workshops';
+
+const stappen = [
+  {
+    titel: 'Doen',
+    tekst:
+      'Je klikt, stemt, onderzoekt of bestuurt, op je eigen telefoon. Niemand vertelt je vooraf wat er gaat gebeuren.',
+  },
+  {
+    titel: 'Vergelijken',
+    tekst:
+      'Met je buurman, je tafel of de hele zaal. Wat zag jij, wat zag de ander, en waar liep het uit elkaar?',
+  },
+  {
+    titel: 'Begrijpen',
+    tekst:
+      'Dan pas de uitleg. Die hangt steeds aan iets wat de zaal net zelf meemaakte, en daardoor blijft hij hangen.',
+  },
+];
+
+const vergelijking = [
+  ['Hoe je het leert', 'Je hoort hoe het werkt', 'Je merkt het zelf, en hoort daarna hoe het werkt'],
+  ['Wie er aan het woord is', 'Vooral de spreker', 'Minstens 60 van de 90 minuten de zaal zelf'],
+  ['Waar je aandacht is', 'Bij de dia’s', 'Bij je buurman, je tafel en de beamer'],
+  ['Voorkennis', 'Helpt', 'Niet nodig'],
+  ['Wat blijft hangen', 'Wat de spreker vertelde', 'Wat je zelf koos, zag en besliste'],
+];
+
+const voordelen = [
+  {
+    titel: 'Een eigen app voor elke workshop',
+    tekst:
+      'Deelnemers doen mee op hun telefoon via een QR-code. Geen account, niets installeren, hooguit een voornaam. Op de beamer ziet de zaal wat ze samen deed.',
+  },
+  {
+    titel: 'De zaal is het middelpunt',
+    tekst:
+      'De telefoon is een hulpmiddel, niet de workshop. Rondes zijn kort. Daarna gaan de schermen omlaag en praat de zaal.',
+  },
+  {
+    titel: 'Gemaakt voor jong en oud',
+    tekst:
+      'Geen voorkennis nodig. Elke ronde start voor iedereen tegelijk, en wie minder handig is met een telefoon, zit naast iemand die het wel is.',
+  },
+  {
+    titel: 'Geen politiek, geen preek',
+    tekst:
+      'We laten zien hoe het werkt; het oordeel is aan de deelnemer. Lindenhaven is verzonnen, dus het gesprek gaat over het systeem en niet over wie er gelijk heeft.',
+  },
+];
+
+const plannen = [
+  {
+    titel: 'Kennismaking',
+    tekst: 'Een kort gesprek over je publiek, je zaal en welke workshop daarbij past.',
+  },
+  {
+    titel: 'Voorstel',
+    tekst: 'Je krijgt een voorstel met datum en prijs, en een aankondigingstekst die je zo kunt gebruiken.',
+  },
+  {
+    titel: 'De workshop',
+    tekst: 'Ik ben ruim op tijd om wifi, beamer en app te testen. Daarna begint het meemaken.',
+  },
+  {
+    titel: 'Terugblik',
+    tekst: 'Samen kijken we terug: wat werkte voor jullie publiek, en wat wil je een volgende keer?',
+  },
+];
+---
+<Base>
+  <section class="held" aria-labelledby="held-titel">
+    <div class="container held-tekst">
+      <h1 id="held-titel">Je begrijpt het pas als je het zelf meemaakt.</h1>
+      <div class="held-rechts">
+        <p class="lead">
+          Drie interactieve workshops over algoritmes, nepnieuws en democratie. Voor bibliotheken, gemeenten,
+          scholen en organisaties die hun publiek niet willen toespreken, maar laten meedoen.
+        </p>
+        <div class="knoppen">
+          <a class="knop" href="/contact/">Plan een kennismaking</a>
+          <a class="knop knop-tweede" href="/workshops/">Bekijk de workshops</a>
+        </div>
+      </div>
+    </div>
+
+    <ul class="banden" aria-label="De drie workshops">
+      {workshops.map((w, i) => (
+        <li class={`toon-${w.tone}`} style={`--i:${i}`}>
+          <a href={`/workshops/${w.slug}/`} class="band">
+            <span class="container band-binnen">
+              <span class="band-vraag">{w.vraag}</span>
+              <span class="band-titel">{w.titel}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="balk" aria-label="In het kort">
+    <div class="container">
+      <dl class="feiten">
+        <div><dt>Per workshop</dt><dd>90 minuten</dd></div>
+        <div><dt>Zelf meedoen</dt><dd>Minstens 60 minuten</dd></div>
+        <div><dt>Groep</dt><dd>12 tot 30 deelnemers</dd></div>
+        <div><dt>Voorkennis</dt><dd>Niet nodig</dd></div>
+        <div><dt>Waar</dt><dd>Op jullie locatie</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sectie" aria-labelledby="aanpak-titel">
+    <div class="container">
+      <div class="sectie-kop">
+        <h2 id="aanpak-titel">Eerst meemaken, dan pas uitleg</h2>
+        <p>
+          Wie weet hoe een feed werkt, klikt anders. Wie weet dat een foto nep is, kijkt anders. Daarom draait
+          elke workshop om dezelfde volgorde.
+        </p>
+      </div>
+      <ol class="stappen">
+        {stappen.map((s, i) => (
+          <li>
+            <span class="stap-nr" aria-hidden="true">{i + 1}</span>
+            <h3>{s.titel}</h3>
+            <p>{s.tekst}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sectie sectie-grijs" aria-labelledby="verschil-titel">
+    <div class="container">
+      <div class="sectie-kop">
+        <h2 id="verschil-titel">Anders dan een lezing</h2>
+        <p>Over deze onderwerpen kun je prima een lezing houden. Dit is wat er verandert als de zaal het zelf doet.</p>
+      </div>
+      <div class="tabel-wrap">
+        <table class="vergelijk">
+          <thead>
+            <tr>
+              <td></td>
+              <th scope="col">Een lezing</th>
+              <th scope="col" class="wij">Een workshop van Meemaken</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vergelijking.map(([rij, lezing, wij]) => (
+              <tr>
+                <th scope="row">{rij}</th>
+                <td>{lezing}</td>
+                <td class="wij">{wij}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="sectie" aria-labelledby="workshops-titel">
+    <div class="container">
+      <div class="sectie-kop">
+        <h2 id="workshops-titel">Drie workshops, drie vragen</h2>
+        <p>
+          Elke workshop begint met een vraag die iedereen zich weleens stelt, en duurt 90 minuten. Los te boeken,
+          of als reeks van drie avonden.
+        </p>
+      </div>
+      <ul class="catalogus">
+        {workshops.map((w) => (
+          <li class={`toon-${w.tone}`}>
+            <a href={`/workshops/${w.slug}/`} class="cat-beeld" tabindex="-1" aria-hidden="true">
+              <WorkshopCover tone={w.tone} />
+            </a>
+            <div class="cat-tekst">
+              <p class="cat-vraag">{w.vraag}</p>
+              <h3><a href={`/workshops/${w.slug}/`}>{w.titel}</a></h3>
+              <p>{w.kort}</p>
+              <dl class="cat-feiten">
+                <div><dt>Duur</dt><dd>90 minuten</dd></div>
+                <div><dt>Groep</dt><dd>12 tot 30</dd></div>
+                <div><dt>Opstelling</dt><dd>{w.tafels}</dd></div>
+              </dl>
+              <a class="cat-link" href={`/workshops/${w.slug}/`}>Over {w.titel}</a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sectie sectie-grijs" aria-labelledby="krijgt-titel">
+    <div class="container">
+      <div class="sectie-kop">
+        <h2 id="krijgt-titel">Wat je aan Meemaken hebt</h2>
+      </div>
+      <ul class="voordelen">
+        {voordelen.map((v) => (
+          <li>
+            <h3>{v.titel}</h3>
+            <p>{v.tekst}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sectie" aria-labelledby="plannen-titel">
+    <div class="container">
+      <div class="sectie-kop">
+        <h2 id="plannen-titel">Van eerste mail tot volle zaal</h2>
+      </div>
+      <ol class="plannen">
+        {plannen.map((s, i) => (
+          <li>
+            <span class="plan-nr" aria-hidden="true">{i + 1}</span>
+            <h3>{s.titel}</h3>
+            <p>{s.tekst}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sectie prijs-sectie" aria-labelledby="prijs-titel">
+    <div class="container prijs">
+      <div>
+        <h2 id="prijs-titel">Eén prijs voor de hele groep</h2>
+        <p class="prijs-tekst">
+          Geen prijs per deelnemer en geen verrassingen achteraf. Je hoort de prijs na de kennismaking, als
+          duidelijk is welke workshop, waar en voor hoeveel mensen.
+        </p>
+        <div class="knoppen">
+          <a class="knop" href="/contact/">Vraag een prijsopgave aan</a>
+        </div>
+      </div>
+      <div class="prijs-paneel">
+        <h3>Altijd inbegrepen</h3>
+        <ul class="streeplijst">
+          <li>Begeleiding van begin tot eind</li>
+          <li>De app voor deelnemers, het beamerscherm en de regie</li>
+          <li>Materiaal, zoals het detectiveboekje dat deelnemers mee naar huis nemen</li>
+          <li>Een aankondigingstekst voor je programma of website</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <Vragen />
+  <Afsluiter />
+</Base>
+
+<style>
+  /* --- Held --------------------------------------------------------- */
+  .held-tekst {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 2rem 4rem;
+    align-items: end;
+    padding-block: clamp(3rem, 2rem + 4vw, 6rem) clamp(2.5rem, 2rem + 2vw, 4rem);
+  }
+  .held h1 {
+    font-size: clamp(2.5rem, 1.3rem + 4.4vw, 4.5rem);
+    line-height: 1.02;
+    max-width: 12ch;
+  }
+  .held-rechts .lead {
+    margin-bottom: 1.75rem;
+  }
+
+  .banden {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .banden li {
+    background: var(--toon);
+    color: var(--papier);
+    animation: band-in 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i) * 0.12s + 0.1s);
+  }
+  @keyframes band-in {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  .band {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  .band:focus-visible {
+    outline: 4px solid var(--papier);
+    outline-offset: -8px;
+  }
+  .band-binnen {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem 3rem;
+    padding-block: clamp(1.4rem, 1rem + 1.6vw, 2.4rem);
+  }
+  .band-vraag {
+    font-family: var(--font-display);
+    font-stretch: var(--breed);
+    font-weight: 800;
+    font-size: var(--t-vraag);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    max-width: 18ch;
+    transition: transform 0.25s ease;
+  }
+  .band-titel {
+    flex: none;
+    font-family: var(--font-display);
+    font-stretch: 108%;
+    font-weight: 600;
+    font-size: var(--t-basis);
+    padding-bottom: 0.15em;
+    border-bottom: 2px solid color-mix(in srgb, currentColor 45%, transparent);
+  }
+  .band:hover .band-vraag {
+    transform: translateX(0.5rem);
+  }
+  .band:hover .band-titel {
+    border-bottom-color: currentColor;
+  }
+
+  /* --- Roze balk ----------------------------------------------------- */
+  .balk {
+    background: var(--roze);
+    padding-block: 2rem;
+  }
+
+  /* --- Stappen ------------------------------------------------------- */
+  .stappen,
+  .plannen {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2.5rem;
+  }
+  .stappen {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    counter-reset: stap;
+  }
+  .stappen li {
+    position: relative;
+    padding-top: 1.25rem;
+    border-top: 3px solid var(--inkt);
+  }
+  .stap-nr,
+  .plan-nr {
+    display: block;
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  .stappen h3,
+  .plannen h3 {
+    margin-bottom: 0.6rem;
+  }
+  .stappen p,
+  .plannen p {
+    color: var(--inkt-zacht);
+    max-width: 30rem;
+  }
+
+  /* --- Vergelijking -------------------------------------------------- */
+  .sectie-grijs {
+    background: #f4f3f8;
+  }
+  .tabel-wrap {
+    overflow-x: auto;
+  }
+  .vergelijk {
+    width: 100%;
+    min-width: 40rem;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .vergelijk th,
+  .vergelijk td {
+    padding: 1rem 1.25rem;
+    vertical-align: top;
+    border-bottom: 1px solid var(--lijn);
+  }
+  .vergelijk thead th {
+    font-family: var(--font-display);
+    font-stretch: 108%;
+    font-weight: 700;
+    border-bottom: 2px solid var(--inkt);
+  }
+  .vergelijk tbody th {
+    font-weight: 700;
+    width: 26%;
+  }
+  .vergelijk td {
+    color: var(--inkt-zacht);
+    width: 32%;
+  }
+  .vergelijk .wij {
+    background: var(--papier);
+    color: var(--inkt);
+  }
+  .vergelijk thead .wij {
+    background: var(--roze);
+  }
+
+  /* --- Catalogus ----------------------------------------------------- */
+  .catalogus {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .catalogus li {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 2rem clamp(2rem, 1rem + 3vw, 4rem);
+    align-items: center;
+    padding-block: clamp(2rem, 1.5rem + 2vw, 3rem);
+    border-top: 1px solid var(--lijn);
+  }
+  .catalogus li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .cat-beeld svg {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+  .cat-vraag {
+    font-family: var(--font-display);
+    font-stretch: 108%;
+    font-weight: 700;
+    color: var(--toon);
+    font-size: var(--t-h3);
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+  }
+  .cat-tekst h3 {
+    font-size: var(--t-h2);
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+  .cat-tekst h3 a {
+    text-decoration: none;
+  }
+  .cat-tekst h3 a:hover {
+    text-decoration: underline;
+  }
+  .cat-tekst > p:not(.cat-vraag) {
+    max-width: var(--maat);
+  }
+  .cat-feiten {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin: 1.5rem 0;
+    font-size: var(--t-klein);
+  }
+  .cat-feiten dt {
+    color: var(--inkt-zacht);
+  }
+  .cat-feiten dd {
+    margin: 0;
+    font-weight: 700;
+  }
+  .cat-link {
+    font-weight: 700;
+    text-decoration-color: var(--toon);
+    text-decoration-thickness: 3px;
+  }
+
+  /* --- Voordelen ----------------------------------------------------- */
+  .voordelen {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 4rem;
+  }
+  .voordelen li {
+    padding-top: 1.25rem;
+    border-top: 3px solid var(--inkt);
+  }
+  .voordelen h3 {
+    margin-bottom: 0.6rem;
+  }
+  .voordelen p {
+    color: var(--inkt-zacht);
+    max-width: 32rem;
+  }
+
+  /* --- Plannen ------------------------------------------------------- */
+  .plannen {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
+  }
+  .plannen li {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--lijn);
+  }
+  .plan-nr {
+    font-size: 2.25rem;
+    color: var(--inkt);
+  }
+
+  /* --- Prijs --------------------------------------------------------- */
+  .prijs-sectie {
+    padding-top: 0;
+  }
+  .prijs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2.5rem 4rem;
+    align-items: start;
+    padding-top: var(--sectie);
+    border-top: 1px solid var(--lijn);
+  }
+  .prijs-tekst {
+    margin-block: 1rem 1.75rem;
+    max-width: 32rem;
+    color: var(--inkt-zacht);
+  }
+  .prijs-paneel {
+    background: var(--roze);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  }
+  .prijs-paneel h3 {
+    margin-bottom: 1.25rem;
+  }
+
+  @media (max-width: 64rem) {
+    .plannen {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 54rem) {
+    .held-tekst,
+    .prijs,
+    .catalogus li {
+      grid-template-columns: 1fr;
+    }
+    .band-binnen {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+    .stappen,
+    .voordelen {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 34rem) {
+    .plannen {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
