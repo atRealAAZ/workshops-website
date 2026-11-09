@@ -4,6 +4,7 @@ import WorkshopCover from '../components/WorkshopCover.astro';
 import Vragen from '../components/Vragen.astro';
 import Afsluiter from '../components/Afsluiter.astro';
 import { workshops } from '../data/workshops';
+import { organisatie, website, veelgesteldeVragen } from '../data/schema';
 
 const stappen = [
   {
@@ -73,7 +74,7 @@ const plannen = [
   },
 ];
 ---
-<Base>
+<Base schema={[organisatie(), website(), veelgesteldeVragen()]}>
   <section class="held" aria-labelledby="held-titel">
     <div class="container held-tekst">
       <h1 id="held-titel">Je begrijpt het pas als je het zelf meemaakt.</h1>

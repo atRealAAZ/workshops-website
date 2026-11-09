@@ -25,6 +25,9 @@ Pagina's: `/`, `/workshops/`, `/workshops/<slug>/`, `/aanpak/`, `/over/`,
 
 ## Voor livegang
 
+- **Domein:** vul `url` in `src/config.ts` in (bijv. `https://meemaken.nl`).
+  Pas dan komen er een sitemap, canonieke links en een `Sitemap:`-regel in
+  `robots.txt` in de build.
 - **E-mailadres:** `contactEmail` in `src/config.ts` is nog een plaatshouder.
 - **Formulier:** zonder `formEndpoint` opent het formulier het mailprogramma
   van de bezoeker met de aanvraag erin. Met een endpoint (Formspree, Basin,
@@ -34,6 +37,12 @@ Pagina's: `/`, `/workshops/`, `/workshops/<slug>/`, `/aanpak/`, `/over/`,
   `~/Projects/Workshops/autom_workshops/sessions/<slug>/` (brief.md,
   structuur.md). Verandert daar het programma, werk dan `src/data/workshops.ts`
   bij.
+
+## Vindbaarheid
+
+Per workshop staan zoektitel, omschrijving en thema's in `src/data/workshops.ts`.
+Gestructureerde data (schema.org) staat in `src/data/schema.ts`. `/llms.txt` en
+`/robots.txt` worden uit dezelfde data gemaakt.
 
 Geen cookies, geen trackers; lettertypes (Archivo, Atkinson Hyperlegible)
 worden zelf gehost via Fontsource.

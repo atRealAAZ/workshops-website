@@ -4,6 +4,7 @@ import WorkshopCover from '../../components/WorkshopCover.astro';
 import Afsluiter from '../../components/Afsluiter.astro';
 import { workshops, type Workshop } from '../../data/workshops';
 import { site } from '../../config';
+import { cursus, kruimelpad } from '../../data/schema';
 
 export function getStaticPaths() {
   return workshops.map((w) => ({ params: { slug: w.slug }, props: { w } }));
@@ -15,7 +16,18 @@ const totaal = w.programma.reduce((s, b) => s + b.minuten, 0);
 const doenMinuten = w.programma.filter((b) => b.doen).reduce((s, b) => s + b.minuten, 0);
 const planHref = `/contact/?workshop=${w.slug}`;
 ---
-<Base titel={w.titel} beschrijving={`${w.vraag} ${w.kort}`}>
+<Base
+  titel={w.seoTitel}
+  beschrijving={w.seoBeschrijving}
+  schema={[
+    cursus(w),
+    kruimelpad([
+      { naam: 'Home', pad: '/' },
+      { naam: 'Workshops', pad: '/workshops/' },
+      { naam: w.titel, pad: `/workshops/${w.slug}/` },
+    ]),
+  ]}
+>
   <div class={`toon-${w.tone}`}>
     <section class="kop-band op-kleur" aria-labelledby="titel">
       <div class="container kop-grid">
@@ -45,6 +57,7 @@ const planHref = `/contact/?workshop=${w.slug}`;
           <div><dt>{f.label}</dt><dd>{f.waarde}</dd></div>
         ))}
         <div><dt>Opstelling</dt><dd>{w.tafels}</dd></div>
+        <div><dt>Thema</dt><dd>{w.themas.join(', ')}</dd></div>
       </dl>
     </div>
 
@@ -252,7 +265,15 @@ const planHref = `/contact/?workshop=${w.slug}`;
     margin-top: -3rem;
     background: var(--roze);
     padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
-    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .feitenpaneel dd {
+    text-wrap: balance;
+  }
+  @media (max-width: 40rem) {
+    .feitenpaneel {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   /* --- Inhoud -------------------------------------------------------- */

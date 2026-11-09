@@ -16,6 +16,12 @@ export interface Workshop {
   titelAfbreken?: string;
   vraag: string;
   ondertitel: string;
+  /** Paginatitel voor zoekmachines: waar mensen op zoeken, plus de naam */
+  seoTitel: string;
+  /** Omschrijving in zoekresultaten, max. ~155 tekens */
+  seoBeschrijving: string;
+  /** Thema's in de woorden die bibliotheken voor hun programma gebruiken */
+  themas: string[];
   tone: Tone;
   kort: string;
   feiten: { label: string; waarde: string }[];
@@ -44,8 +50,12 @@ export const workshops: Workshop[] = [
     vraag: 'Zie jij dezelfde wereld als je buurman?',
     ondertitel: 'Ervaar hoe je eigen klikken een eigen werkelijkheid maken.',
     tone: 'bubbel',
+    seoTitel: 'Workshop over filterbubbels en algoritmes: De informatiebubbel',
+    seoBeschrijving:
+      'Interactieve workshop over filterbubbels en algoritmes. Deelnemers ervaren zelf hoe een informatiebubbel ontstaat. 90 minuten, geen voorkennis nodig.',
+    themas: ['Mediawijsheid', 'Filterbubbels en algoritmes', 'Sociale media'],
     kort:
-      'Iedereen begint met precies dezelfde nieuwsfeed. Na vijf rondes klikken leest ieder iets anders over dezelfde stad. Dan vergelijk je met je buurman, en pas daarna hoor je hoe dat kan.',
+      'Een workshop over filterbubbels en algoritmes. Iedereen begint met precies dezelfde nieuwsfeed. Na vijf rondes klikken leest ieder iets anders over dezelfde stad. Dan vergelijk je met je buurman, en pas daarna hoor je hoe dat kan.',
     feiten: basisFeiten('In de zaal, met telefoon en beamer'),
     tafels: 'In tweetallen',
     verhaal: [
@@ -126,8 +136,12 @@ export const workshops: Workshop[] = [
     vraag: 'Kun jij je ogen nog vertrouwen?',
     ondertitel: 'Kruip in de huid van een digitale detective, en leer uitzoeken wat klopt.',
     tone: 'detective',
+    seoTitel: 'Workshop nepnieuws en deepfakes herkennen: Nepnieuws-detective',
+    seoBeschrijving:
+      'Interactieve workshop over nepnieuws, deepfakes en AI-beelden. Deelnemers leren als detective uitzoeken wat klopt. 90 minuten, geen voorkennis nodig.',
+    themas: ['Mediawijsheid', 'Nepnieuws en desinformatie', 'AI en deepfakes'],
     kort:
-      'Met AI maak je in seconden een overtuigende foto, video of nieuwsbericht. Na deze avond weet je dat je ogen niet genoeg zijn, en wat een detective dan wél doet: uitzoeken waar iets vandaan komt.',
+      'Met AI maak je in seconden een overtuigende foto, video of nieuwsbericht. In deze workshop over nepnieuws en deepfakes merk je dat je ogen niet genoeg zijn, en leer je wat een detective dan wél doet: uitzoeken waar iets vandaan komt.',
     feiten: basisFeiten('In de zaal, aan tafels, met telefoon en beamer'),
     tafels: 'Tafels van 3 tot 5',
     verhaal: [
@@ -220,8 +234,12 @@ export const workshops: Workshop[] = [
     vraag: 'Hoe zou jij het land besturen?',
     ondertitel: 'Ervaar waarom democratie moeilijk is, en probeer zelf hoe het anders kan.',
     tone: 'land',
+    seoTitel: 'Workshop over democratie en inspraak: Samen een land besturen',
+    seoBeschrijving:
+      'Interactieve workshop over democratie, burgerberaden en digitale inspraak. De zaal bestuurt samen een verzonnen land. 90 minuten, geen voorkennis nodig.',
+    themas: ['Burgerschap', 'Democratie en inspraak', 'Digitale democratie'],
     kort:
-      'Met de hele zaal bestuur je het verzonnen land Lindenhaven: vier jaar, één beperkt budget, rapporten die elkaar tegenspreken. Aan het eind zijn er verkiezingen. Daarna probeer je een andere manier van besluiten.',
+      'Een workshop over democratie en inspraak. Met de hele zaal bestuur je het verzonnen land Lindenhaven: vier jaar, één beperkt budget, rapporten die elkaar tegenspreken. Aan het eind zijn er verkiezingen. Daarna probeer je een andere manier van besluiten.',
     feiten: basisFeiten('In de zaal, met telefoon, beamer en gesprek'),
     tafels: 'Aan tafels, of als één groep',
     verhaal: [

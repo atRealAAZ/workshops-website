@@ -4,7 +4,7 @@ import PaginaKop from '../components/PaginaKop.astro';
 import Afsluiter from '../components/Afsluiter.astro';
 import { site } from '../config';
 ---
-<Base titel="Over" beschrijving={`${site.name} is van ${site.owner}: interactieve workshops over de digitale samenleving.`}>
+<Base titel={`Over ${site.name}`} beschrijving={`${site.name} is van ${site.owner}: interactieve workshops over de digitale samenleving.`}>
   <PaginaKop titel={`Over ${site.name}`} />
 
   <div class="container over">

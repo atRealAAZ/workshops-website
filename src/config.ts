@@ -6,6 +6,11 @@ export const site = {
   tagline: 'Interactieve workshops over de digitale samenleving',
   owner: 'Arthur Zwartsenberg',
 
+  // Het volledige domein, zonder slash aan het eind, bijv. 'https://meemaken.nl'.
+  // Zolang dit leeg is, komen er geen canonieke links en geen sitemap in de
+  // build: met een verkeerd domein vertel je Google het verkeerde adres.
+  url: '',
+
   // TODO: vervang door je echte adres. example.com is een plaatshouder.
   contactEmail: 'hallo@example.com',
 

@@ -2,7 +2,7 @@ export const faq: { vraag: string; antwoord: string }[] = [
   {
     vraag: 'Voor wie zijn deze workshops?',
     antwoord:
-      'Voor een gemengd publiek: jong en oud, met en zonder verstand van techniek. Ze zijn gemaakt voor de openbare bibliotheek, en passen ook bij gemeenten, maatschappelijke organisaties, opleidingen en bedrijven.',
+      'Voor een gemengd publiek: jong en oud, met en zonder verstand van techniek. Ze zijn gemaakt voor de openbare bibliotheek en passen in een programma rond mediawijsheid, digitale vaardigheden of burgerschap. Ze passen net zo goed bij gemeenten, maatschappelijke organisaties, opleidingen en bedrijven.',
   },
   {
     vraag: 'Moeten deelnemers iets weten van AI of techniek?',

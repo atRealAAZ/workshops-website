@@ -5,14 +5,25 @@ import Footer from '../components/Footer.astro';
 import { site } from '../config';
 
 interface Props {
+  /** Paginatitel; de naam van de site komt er vanzelf achter */
   titel?: string;
   beschrijving?: string;
+  /** schema.org-objecten voor deze pagina (JSON-LD) */
+  schema?: object[];
+  /** true = niet opnemen in zoekmachines (bijv. de 404) */
+  nietIndexeren?: boolean;
 }
 const {
-  titel,
-  beschrijving = 'Drie interactieve workshops van 90 minuten over informatiebubbels, nepnieuws en democratie. Voor bibliotheken, gemeenten, scholen en organisaties.',
+  titel = 'Interactieve workshops over nepnieuws, filterbubbels en democratie',
+  beschrijving = 'Drie interactieve workshops van 90 minuten over filterbubbels, nepnieuws en democratie. Voor bibliotheken, gemeenten, scholen en organisaties.',
+  schema = [],
+  nietIndexeren = false,
 } = Astro.props;
-const volledigeTitel = titel ? `${titel} | ${site.name}` : `${site.name}: ${site.tagline.toLowerCase()}`;
+const volledigeTitel = `${titel} | ${site.name}`;
+const canoniek = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+// Lege velden (bijv. url zolang er geen domein is) weglaten, en '<' escapen
+// zodat de JSON nooit een </script> kan bevatten.
+const jsonLd = schema.map((s) => JSON.stringify(s).replace(/</g, '\\u003c'));
 ---
 <!doctype html>
 <html lang="nl">
@@ -21,10 +32,15 @@ const volledigeTitel = titel ? `${titel} | ${site.name}` : `${site.name}: ${site
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{volledigeTitel}</title>
     <meta name="description" content={beschrijving} />
+    {nietIndexeren && <meta name="robots" content="noindex" />}
     <meta property="og:title" content={volledigeTitel} />
     <meta property="og:description" content={beschrijving} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="nl_NL" />
+    <meta property="og:site_name" content={site.name} />
+    {canoniek && <link rel="canonical" href={canoniek} />}
+    {canoniek && <meta property="og:url" content={canoniek} />}
+    {jsonLd.map((j) => <script type="application/ld+json" set:html={j} />)}
     <meta name="theme-color" content="#ffffff" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
