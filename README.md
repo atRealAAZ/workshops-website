@@ -25,6 +25,10 @@ Pagina's: `/`, `/workshops/`, `/workshops/<slug>/`, `/aanpak/`, `/over/`,
 
 ## Voor livegang
 
+- **Railway:** koppel de repo; Railway draait `npm run build` en daarna
+  `npm start` (`serve` op `$PORT`, met de echte 404-pagina). Node-versie staat
+  in `engines` in `package.json`.
+
 - **Domein:** vul `url` in `src/config.ts` in (bijv. `https://meemaken.nl`).
   Pas dan komen er een sitemap, canonieke links en een `Sitemap:`-regel in
   `robots.txt` in de build.
