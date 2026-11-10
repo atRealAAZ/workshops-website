@@ -12,7 +12,7 @@ export const site = {
   url: '',
 
   // TODO: vervang door je echte adres. example.com is een plaatshouder.
-  contactEmail: 'hallo@example.com',
+  contactEmail: 'a.a.zwartsenberg@gmail.com',
 
   // Laat leeg: het formulier opent dan het mailprogramma van de bezoeker met
   // de aanvraag erin. Vul een endpoint in (bijv. Formspree, Basin, Web3Forms)
